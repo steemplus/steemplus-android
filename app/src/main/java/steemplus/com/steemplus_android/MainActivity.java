@@ -16,7 +16,9 @@ public class MainActivity extends AppCompatActivity
 
     private static final String TAG_LOG = "Log MainActivity";
     private FragmentSwitcher switcher_o;
+    private FragmentSwitcher drawer_switcher_o;
     private String current_fragment_s;
+    private String current_fragment_user_profile;
     private DrawerLayout drawer;
     private NavigationView navigationView;
 
@@ -27,7 +29,8 @@ public class MainActivity extends AppCompatActivity
 
         //Initialize Fragment Manager
         FragmentManager fManager = getSupportFragmentManager();
-        switcher_o = new FragmentSwitcher(fManager);
+        switcher_o = new FragmentSwitcher(fManager, R.id.fragment_container);
+        drawer_switcher_o = new FragmentSwitcher(fManager, R.id.menu_user_profile);
 
         //Auto generated for drawer ----
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -47,6 +50,8 @@ public class MainActivity extends AppCompatActivity
         if(savedInstanceState==null)
         {
             switcher_o.showFragment(current_fragment_s, Constants.MAIN_FRAGMENT);
+            drawer_switcher_o.showFragment(current_fragment_user_profile, Constants.DRAWER_USER_PANEL_FRAGMENT);
+            current_fragment_user_profile = Constants.DRAWER_USER_PANEL_FRAGMENT;
             current_fragment_s = Constants.MAIN_FRAGMENT;
             navigationView.setCheckedItem(R.id.steemit);
 

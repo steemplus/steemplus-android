@@ -4,6 +4,10 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 
+import steemplus.com.steemplus_android.Fragments.DrawerUserPanelFragment;
+import steemplus.com.steemplus_android.Fragments.MainFragment;
+import steemplus.com.steemplus_android.Fragments.WalletFragment;
+
 /**
  * Created by quentin on 3/13/18.
  */
@@ -13,26 +17,25 @@ class FragmentSwitcher {
     private static final String TAG_LOG = "Tag Switcher";
     private final FragmentManager fManager;
     private boolean createnew=true;
+    private int container;
 
-    public FragmentSwitcher(FragmentManager fManager)
+    public FragmentSwitcher(FragmentManager fManager, int fragmentLayoutId)
     {
         this.fManager=fManager;
+        this.container=fragmentLayoutId;
     }
 
     public void showFragment(String current_tag, String new_tag, boolean createNew)
     {
         createnew=createNew;
-        showFragment( current_tag,  new_tag);
+        showFragment(current_tag, new_tag);
     }
 
     public void showFragment(String current_tag, String new_tag)
     {
-        int container=R.id.fragment_container;
         Fragment fragment=null;
         if(current_tag!=null)
             fragment=fManager.findFragmentByTag(new_tag);
-
-
 
         FragmentTransaction fTransaction=fManager.beginTransaction();
         if(fragment==null)
@@ -67,6 +70,8 @@ class FragmentSwitcher {
                 return new MainFragment();
             case Constants.WALLET_FRAGMENT:
                 return new WalletFragment();
+            case Constants.DRAWER_USER_PANEL_FRAGMENT:
+                return new DrawerUserPanelFragment();
 
         }
         return null;

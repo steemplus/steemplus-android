@@ -1,6 +1,6 @@
 package steemplus.com.steemplus_android;
 
-interface taskCompleteListener<T>
+public interface taskCompleteListener<T>
 {
     void onTaskComplete(T result);
 }
