@@ -10,6 +10,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import eu.bittrade.libs.steemj.SteemJ;
+import eu.bittrade.libs.steemj.base.models.AccountName;
+import eu.bittrade.libs.steemj.configuration.SteemJConfig;
+import eu.bittrade.libs.steemj.exceptions.SteemCommunicationException;
+import eu.bittrade.libs.steemj.exceptions.SteemResponseException;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, taskCompleteListener {
@@ -22,6 +29,8 @@ public class MainActivity extends AppCompatActivity
     private DrawerLayout drawer;
     private NavigationView navigationView;
 
+    private SteemJ steemJ;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,17 +39,19 @@ public class MainActivity extends AppCompatActivity
         //Initialize Fragment Manager
         FragmentManager fManager = getSupportFragmentManager();
         switcher_o = new FragmentSwitcher(fManager, R.id.fragment_container);
-        drawer_switcher_o = new FragmentSwitcher(fManager, R.id.menu_user_profile);
+
 
         //Auto generated for drawer ----
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+        drawer_switcher_o = new FragmentSwitcher(fManager, R.id.nav_view);
 
         navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -109,7 +120,35 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onTaskComplete(Object result) {
+    public void onTaskComplete(Object result)
+    {
 
     }
+
+    private void initSteemJ()
+    {
+        SteemJConfig myConfig = SteemJConfig.getInstance();
+        myConfig.setResponseTimeout(100000);
+        myConfig.setDefaultAccount(new AccountName("steemj"));
+
+        try {
+            steemJ = new SteemJ();
+        } catch (SteemCommunicationException e) {
+            Toast.makeText(MainActivity.this, "Can't connect to SteemJ", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        } catch (SteemResponseException e) {
+            Toast.makeText(MainActivity.this, "Can't connect to SteemJ", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
+        }
+    }
+
+    public SteemJ getSteemJ()
+    {
+        if(steemJ==null)
+            initSteemJ();
+
+        return steemJ;
+    }
+
+
 }
