@@ -2,29 +2,23 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
+    <item
+        android:id="@+id/manage_account"
+        android:icon="@drawable/ic_account"
+        android:title="@string/account_manager" />
 
-    <group android:checkableBehavior="single">
-        <item
-            android:id="@+id/steemit"
-            android:icon="@drawable/ic_menu_camera"
-            android:title="Steemit" />
-        <item
-            android:id="@+id/wallet"
-            android:icon="@drawable/ic_menu_gallery"
-            android:title="Wallet" />
-    </group>
-
-    <item android:title="Communicate">
+    <item android:title="@string/features">
         <menu>
-            <item
-                android:id="@+id/nav_share"
-                android:icon="@drawable/ic_menu_share"
-                android:title="Share" />
-            <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/ic_menu_send"
-                android:title="Send" />
+
+                <item
+                    android:id="@+id/steemit"
+                    android:icon="@drawable/ic_webview"
+                    android:title="Steemit" />
+                <item
+                    android:id="@+id/wallet"
+                    android:icon="@drawable/ic_wallet"
+                    android:title="@string/wallet" />
+
         </menu>
     </item>
-
 </menu>

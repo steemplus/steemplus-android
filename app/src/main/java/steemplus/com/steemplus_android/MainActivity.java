@@ -1,5 +1,6 @@
 package steemplus.com.steemplus_android;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.FragmentManager;
@@ -8,6 +9,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -35,7 +37,7 @@ public class MainActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
+        initSteemJ();
         //Initialize Fragment Manager
         FragmentManager fManager = getSupportFragmentManager();
         switcher_o = new FragmentSwitcher(fManager, R.id.fragment_container);
@@ -113,6 +115,11 @@ public class MainActivity extends AppCompatActivity
                 switcher_o.showFragment(current_fragment_s,Constants.WALLET_FRAGMENT);
                 current_fragment_s=Constants.WALLET_FRAGMENT;
                 break;
+            case R.id.manage_account:
+                switcher_o.showFragment(current_fragment_s,Constants.MANAGE_ACCOUNT_FRAGMENT);
+                current_fragment_s=Constants.MANAGE_ACCOUNT_FRAGMENT;
+                break;
+
         }
 
         drawer.closeDrawer(GravityCompat.START);
@@ -120,26 +127,30 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
-    public void onTaskComplete(Object result)
+    public void onTaskComplete(Object result, String action)
     {
 
     }
 
     private void initSteemJ()
     {
-        SteemJConfig myConfig = SteemJConfig.getInstance();
-        myConfig.setResponseTimeout(100000);
-        myConfig.setDefaultAccount(new AccountName("steemj"));
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+                SteemJConfig myConfig = SteemJConfig.getInstance();
+                myConfig.setResponseTimeout(100000);
+                myConfig.setDefaultAccount(new AccountName("steem-plus"));
 
-        try {
-            steemJ = new SteemJ();
-        } catch (SteemCommunicationException e) {
-            Toast.makeText(MainActivity.this, "Can't connect to SteemJ", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        } catch (SteemResponseException e) {
-            Toast.makeText(MainActivity.this, "Can't connect to SteemJ", Toast.LENGTH_SHORT).show();
-            e.printStackTrace();
-        }
+                try {
+                    steemJ = new SteemJ();
+                } catch (SteemCommunicationException e) {
+                    e.printStackTrace();
+                } catch (SteemResponseException e) {
+                    e.printStackTrace();
+                }
+                return null;
+            }
+        }.execute();
     }
 
     public SteemJ getSteemJ()

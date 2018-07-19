@@ -6,6 +6,7 @@ import android.support.v4.app.FragmentTransaction;
 
 import steemplus.com.steemplus_android.Fragments.DrawerUserPanelFragment;
 import steemplus.com.steemplus_android.Fragments.MainFragment;
+import steemplus.com.steemplus_android.Fragments.ManageAccountFragment;
 import steemplus.com.steemplus_android.Fragments.WalletFragment;
 
 /**
@@ -72,6 +73,8 @@ class FragmentSwitcher {
                 return new WalletFragment();
             case Constants.DRAWER_USER_PANEL_FRAGMENT:
                 return new DrawerUserPanelFragment();
+            case Constants.MANAGE_ACCOUNT_FRAGMENT:
+                return new ManageAccountFragment();
 
         }
         return null;
