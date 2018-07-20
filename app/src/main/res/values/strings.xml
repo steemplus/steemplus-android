@@ -13,7 +13,17 @@
     <string name="account_manager">Account Manager</string>
     <string name="account">Account</string>
 
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+    <string name="continue_operation">Continue</string>
+    <string name="cancel">Cancel</string>
+
     // Error messages
     <string name="username_empty">Username field is empty. Please enter one!</string>
     <string name="username_wrong">Username is wrong. Please check and try again!</string>
+    <string name="no_account_configured">You haven\'t configure yet, go to account manager to add one</string>
+
+    // Popups
+    <string name="delete_confirmation">You are about to delete %1$s\'s account. Are you sure you want to delete it ?</string>
+    <string name="set_favorite">You are about to set %1$s\'s as your active account.</string>
 </resources>

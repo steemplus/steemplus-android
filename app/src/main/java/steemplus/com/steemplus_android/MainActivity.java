@@ -1,5 +1,9 @@
 package steemplus.com.steemplus_android;
 
+import android.arch.persistence.db.SupportSQLiteDatabase;
+import android.arch.persistence.room.Room;
+import android.arch.persistence.room.migration.Migration;
+import android.content.Context;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -19,6 +23,8 @@ import eu.bittrade.libs.steemj.base.models.AccountName;
 import eu.bittrade.libs.steemj.configuration.SteemJConfig;
 import eu.bittrade.libs.steemj.exceptions.SteemCommunicationException;
 import eu.bittrade.libs.steemj.exceptions.SteemResponseException;
+import steemplus.com.steemplus_android.Database.AppDatabase;
+import steemplus.com.steemplus_android.Database.Databases.Migrations;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, taskCompleteListener {
@@ -32,12 +38,17 @@ public class MainActivity extends AppCompatActivity
     private NavigationView navigationView;
 
     private SteemJ steemJ;
+    private static final String DATABASE_NAME = "steemplus-db";
+    private static AppDatabase dnInstance;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        // Init steemJ
         initSteemJ();
+        // Init database
+        createDatabase(this);
         //Initialize Fragment Manager
         FragmentManager fManager = getSupportFragmentManager();
         switcher_o = new FragmentSwitcher(fManager, R.id.fragment_container);
@@ -161,5 +172,28 @@ public class MainActivity extends AppCompatActivity
         return steemJ;
     }
 
+    public static AppDatabase getAppDatabase(Context context) {
+        if (dnInstance == null) {
+            createDatabase(context);
+        }
+        return dnInstance;
+    }
 
+    public static void destroyDbInstance() {
+        dnInstance = null;
+    }
+
+    public static void createDatabase(final Context context)
+    {
+        new AsyncTask<Void, Void, Void>() {
+            @Override
+            protected Void doInBackground(Void... params) {
+
+                dnInstance = Room.databaseBuilder(context, AppDatabase.class, DATABASE_NAME)
+                        .addMigrations(Migrations.MIGRATION_1_2, Migrations.MIGRATION_2_3)
+                        .build();
+                return null;
+            }
+        }.execute();
+    }
 }
