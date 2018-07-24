@@ -1,56 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:paddingLeft="@dimen/container_padding"
     android:paddingRight="@dimen/container_padding"
-    android:orientation="vertical"
-    android:layout_gravity="bottom"
     android:weightSum="100">
 
     <TextView
+        android:id="@+id/title_account_manager"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="50dp"
         android:layout_marginTop="@dimen/title_margin_top"
-        android:gravity="center_horizontal"
-        android:text="@string/account_manager"
         android:background="@drawable/title_bottom_border"
+        android:gravity="center_horizontal"
         android:paddingBottom="@dimen/title_padding_bottom"
-        android:textSize="@dimen/title_size"
+        android:text="@string/account_manager"
         android:textColor="@color/title_color"
-        android:textStyle="italic"
-        android:layout_weight="10"/>
+        android:textSize="@dimen/title_size"
+        android:textStyle="italic" />
+
+    <LinearLayout
+        android:id="@+id/content_manager_footer"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="15dp"
+        android:layout_marginTop="@dimen/title_margin_top"
+        android:gravity="bottom"
+        android:orientation="horizontal"
+        android:weightSum="3">
+
+        <EditText
+            android:id="@+id/user_account_name_edit_text"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="2"
+            android:background="@drawable/edit_text_form"
+            android:paddingLeft="5dp"
+            android:textCursorDrawable="@null"
+            android:inputType="textEmailAddress"/>
+
+        <Button
+            android:id="@+id/add_user_account_btn"
+            style="@style/button_primary_form_style"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:text="@string/add_account" />
+    </LinearLayout>
 
     <ListView
         android:id="@+id/list_accounts"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="82"
-        android:orientation="vertical">
-    </ListView>
+        android:layout_height="match_parent"
+        android:layout_below="@id/title_account_manager"
+        android:layout_above="@id/content_manager_footer"
+        android:orientation="vertical"></ListView>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="8"
-        android:orientation="horizontal"
-        android:weightSum="3"
-        android:layout_marginTop="@dimen/title_margin_top">
-        <EditText
-            android:id="@+id/user_account_name_edit_text"
-            android:layout_height="match_parent"
-            android:layout_width="0dp"
-            android:layout_weight="2"
-            android:background="@drawable/edit_text_form"
-            android:textCursorDrawable="@null"
-            android:paddingLeft="5dp"/>
-        <Button
-            android:id="@+id/add_user_account_btn"
-            android:layout_height="match_parent"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:text="@string/add_account"
-            style="@style/button_primary_form_style"/>
-    </LinearLayout>
-
-</LinearLayout>
+</RelativeLayout>

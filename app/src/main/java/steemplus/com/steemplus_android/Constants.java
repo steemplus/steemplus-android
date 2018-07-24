@@ -13,5 +13,15 @@ public class Constants {
 
     public static final String PANEL_TAG = "PANEL_TAG";
 
+    public static final String URL_GET = "GET";
+    public static final String URL_POST = "POST";
+
     public static final String STEEMJ_GET_ACCOUNT = "steemJGetAccount";
+
+    public static final String GET_STEEMPLUS_WALLET_HISTORY = "getSteemplusWalletHistory";
+
+
+    // Steemplus-api urls
+    public static final String STEEMPLUS_API_BASE_URL = "https://steemplus-api.herokuapp.com/api/";
+    public static final String GET_STEEMPLUS_WALLET_HISTORY_URL = STEEMPLUS_API_BASE_URL + "get-wallet-content";
 }

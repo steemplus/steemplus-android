@@ -13,6 +13,22 @@
     <string name="account_manager">Account Manager</string>
     <string name="account">Account</string>
 
+    <string name="wallet_claim_text">Claim Rewards</string>
+    <string name="wallet_transfer_to_text">Received from</string>
+    <string name="wallet_transfer_from_text">Sent to</string>
+    <string name="display_filters">Display Filters</string>
+    <string name="hide_filters">Hide Filters</string>
+
+    // Filter types
+    <string name="claim">Clain Rewards</string>
+    <string name="transfer_to_type">Received</string>
+    <string name="transfer_from_type">Sent</string>
+    <string name="hide_spam">Hide Spam</string>
+    <string name="min_sbd">Min SBD</string>
+    <string name="min_sp">Min SP</string>
+    <string name="min_steem">Min Steem</string>
+
+
     <string name="yes">Yes</string>
     <string name="no">No</string>
     <string name="continue_operation">Continue</string>
@@ -22,8 +38,13 @@
     <string name="username_empty">Username field is empty. Please enter one!</string>
     <string name="username_wrong">Username is wrong. Please check and try again!</string>
     <string name="no_account_configured">You haven\'t configure yet, go to account manager to add one</string>
+    <string name="steemplus_api_not_responding">Steemplus API is not responding. Please try later...</string>
+    <string name="no_active_user">No selected user account. Please select one and try again.</string>
 
     // Popups
     <string name="delete_confirmation">You are about to delete %1$s\'s account. Are you sure you want to delete it ?</string>
     <string name="set_favorite">You are about to set %1$s\'s as your active account.</string>
+
+    // Format date
+    <string name="format_date">yyyy/MM/dd HH:mm:ss</string>
 </resources>

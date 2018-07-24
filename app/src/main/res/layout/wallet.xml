@@ -1,12 +1,193 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:paddingLeft="@dimen/container_padding"
+    android:paddingRight="@dimen/container_padding">
+
     <TextView
+        android:id="@+id/title_wallet"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="@dimen/title_margin_top"
+        android:background="@drawable/title_bottom_border"
+        android:gravity="center_horizontal"
+        android:paddingBottom="@dimen/title_padding_bottom"
+        android:text="@string/wallet"
+        android:textColor="@color/title_color"
+        android:textSize="@dimen/title_size"
+        android:textStyle="italic" />
+
+    <LinearLayout
+        android:id="@+id/filters_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="@string/wallet"
-        android:gravity="center_horizontal"
-        android:textSize="@dimen/title_size"/>
+        android:layout_below="@id/title_wallet"
+        android:background="@drawable/title_bottom_border"
+        android:gravity="center_vertical"
+        android:padding="5dp"
+        android:textColor="@color/colorPrimary">
 
-</android.support.constraint.ConstraintLayout>
+        <TextView
+            android:id="@+id/filters_button_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="5dp"
+            android:text="@string/display_filters" />
+
+        <ImageView
+            android:id="@+id/filters_button_icon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/arrow_down_float" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/filters"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/filters_button"
+        android:background="@drawable/title_bottom_border"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <Switch
+                android:id="@+id/filter_claim"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="@string/claim"
+                android:theme="@style/SwitchTheme" />
+
+            <Switch
+                android:id="@+id/filter_transfer_from"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="@string/transfer_from_type"
+                android:theme="@style/SwitchTheme" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:orientation="horizontal">
+
+            <Switch
+                android:id="@+id/filter_transfer_to"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="true"
+                android:text="@string/transfer_to_type"
+                android:theme="@style/SwitchTheme" />
+
+            <Switch
+                android:id="@+id/filter_hide_span"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:checked="false"
+                android:text="@string/hide_spam"
+                android:theme="@style/SwitchTheme" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="6"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="@string/min_sbd" />
+
+            <EditText
+                android:id="@+id/min_sbd_edit_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:inputType="numberDecimal"
+                android:background="@drawable/edit_text"
+                android:textCursorDrawable="@null"
+                android:padding="2dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="6"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="@string/min_sp" />
+
+            <EditText
+                android:id="@+id/min_sp_edit_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:inputType="numberDecimal"
+                android:background="@drawable/edit_text"
+                android:textCursorDrawable="@null"
+                android:padding="2dp"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="6"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:text="@string/min_steem"/>
+
+            <EditText
+                android:id="@+id/min_steem_edit_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="4"
+                android:inputType="numberDecimal"
+                android:background="@drawable/edit_text"
+                android:textCursorDrawable="@null"
+                android:padding="2dp"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+    <ListView
+        android:id="@+id/list_items_wallet"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/filters"
+        android:orientation="vertical">
+    </ListView>
+
+</RelativeLayout>
+
