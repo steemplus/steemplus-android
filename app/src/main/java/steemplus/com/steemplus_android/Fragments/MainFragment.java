@@ -16,6 +16,7 @@ import android.widget.Toast;
 import java.io.InputStream;
 
 import steemplus.com.steemplus_android.MainActivity;
+import steemplus.com.steemplus_android.Models.UserAccount;
 import steemplus.com.steemplus_android.R;
 import steemplus.com.steemplus_android.taskCompleteListener;
 
@@ -57,12 +58,13 @@ public class MainFragment extends Fragment {
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        UserAccount account = activity.getActiveUser();
 
-        webview.loadUrl("https://steemit.com/trending/");
+        if(account == null)
+            webview.loadUrl("https://steemit.com/trending/");
+        else
+            webview.loadUrl("https://steemit.com/@" + account.getUsername() + "/feed");
         webview.getSettings().setJavaScriptEnabled(true);
         webview.getSettings().setDomStorageEnabled(true);
     }
-
-
-
 }

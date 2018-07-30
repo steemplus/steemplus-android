@@ -8,7 +8,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,7 +40,7 @@ public class ManageAccountFragment extends Fragment implements taskCompleteListe
     private Button addUserAccountButton;
     private EditText userAccountNameEditText;
 
-    private UserAccount selectedAccount;
+    private UserAccount activeUser;
 
     private ArrayList<UserAccount> userAccounts;
 
@@ -103,8 +102,12 @@ public class ManageAccountFragment extends Fragment implements taskCompleteListe
         accountsListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view,int position, long id) {
-                selectedAccount = (UserAccount)accountsListView.getItemAtPosition(position);
-
+                activeUser = (UserAccount)accountsListView.getItemAtPosition(position);
+                if(activeUser.isFavorite())
+                {
+                    Toast.makeText(activity, getString(R.string.already_active), Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
@@ -115,9 +118,15 @@ public class ManageAccountFragment extends Fragment implements taskCompleteListe
                                     @Override
                                     protected Void doInBackground(UserAccount... params) {
                                         UserAccount oldFavorite = null;
-                                        for (UserAccount ua : userAccounts)
+                                        int i = 0;
+                                        for(i = 0; i < userAccounts.size(); i++)
                                         {
-                                            if(ua.isFavorite()) oldFavorite = ua;
+                                            UserAccount ua = userAccounts.get(i);
+                                            if(ua.isFavorite())
+                                            {
+                                                oldFavorite = ua;
+                                                break;
+                                            }
                                         }
                                         params[0].setFavorite(true);
                                         if(oldFavorite==null)
@@ -126,20 +135,20 @@ public class ManageAccountFragment extends Fragment implements taskCompleteListe
                                         }
                                         else
                                         {
-                                            oldFavorite.setFavorite(false);
+                                            userAccounts.get(i).setFavorite(false);
                                             activity.getAppDatabase(activity).userDao().setFavorite(params[0], oldFavorite);
                                         }
-
-
                                         return null;
                                     }
 
                                     @Override
                                     protected void onPostExecute(Void result)
                                     {
-                                        refreshUserPanel();
+                                        activity.refreshActiveUser();
+                                        adapter.notifyDataSetChanged();
+                                        refreshDrawer();
                                     }
-                                }.execute(selectedAccount);
+                                }.execute(activeUser);
                                 break;
 
                             case DialogInterface.BUTTON_NEGATIVE:
@@ -148,7 +157,7 @@ public class ManageAccountFragment extends Fragment implements taskCompleteListe
                     }
                 };
                 AlertDialog.Builder builder = new AlertDialog.Builder(activity);
-                builder.setMessage(getString(R.string.set_favorite, selectedAccount.getUsername())).setPositiveButton(getString(R.string.continue_operation), dialogClickListener)
+                builder.setMessage(getString(R.string.set_favorite, activeUser.getUsername())).setPositiveButton(getString(R.string.continue_operation), dialogClickListener)
                         .setNegativeButton(getString(R.string.cancel), dialogClickListener).show();
             }
         });
@@ -174,6 +183,9 @@ public class ManageAccountFragment extends Fragment implements taskCompleteListe
                                     @Override
                                     protected void onPostExecute(Void result)
                                     {
+                                        if(item.isFavorite())
+                                            refreshDrawer();
+
                                         userAccounts.remove(item);
                                         adapter.notifyDataSetChanged();
                                     }
@@ -240,7 +252,11 @@ public class ManageAccountFragment extends Fragment implements taskCompleteListe
                     protected void onPostExecute(UserAccount newUserAccount)
                     {
                         if(userAccounts.isEmpty())
-                            refreshUserPanel();
+                        {
+                            activity.refreshActiveUser();
+                            refreshDrawer();
+
+                        }
                         userAccounts.add(newUserAccount);
                         adapter.notifyDataSetChanged();
                         userAccountNameEditText.setText("");
@@ -251,23 +267,10 @@ public class ManageAccountFragment extends Fragment implements taskCompleteListe
         }
     }
 
-    public void refreshUserPanel()
+    public void refreshDrawer()
     {
-        Fragment frg = null;
-        frg = getFragmentManager().findFragmentByTag(Constants.DRAWER_USER_PANEL_FRAGMENT);
-        final FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.detach(frg);
-        ft.attach(frg);
-        ft.commit();
-    }
-
-    public void refreshView()
-    {
-        Fragment frg = null;
-        frg = getFragmentManager().findFragmentByTag(Constants.MANAGE_ACCOUNT_FRAGMENT);
-        final FragmentTransaction ft = getFragmentManager().beginTransaction();
-        ft.detach(frg);
-        ft.attach(frg);
-        ft.commit();
+            Fragment frg = null;
+            frg = getFragmentManager().findFragmentByTag(Constants.DRAWER_USER_PANEL_FRAGMENT);
+            getFragmentManager().beginTransaction().detach(frg).attach(frg).commit();
     }
 }

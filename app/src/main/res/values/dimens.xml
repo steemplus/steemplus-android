@@ -10,4 +10,11 @@
     <dimen name="title_margin_top">15dp</dimen>
     <dimen name="title_padding_bottom">8dp</dimen>
     <dimen name="container_padding">16dp</dimen>
+
+    <dimen name="text_size_wallet">15dp</dimen>
+
+    <dimen name="text_size_settings_label">15dp</dimen>
+    <dimen name="text_size_settings_edit">20dp</dimen>
+    <dimen name="margin_bottom_settings_tv_item">3dp</dimen>
+    <dimen name="padding_input_settings">6dp</dimen>
 </resources>

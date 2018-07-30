@@ -4,7 +4,9 @@
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close navigation drawer</string>
 
-    <string name="action_settings">Settings</string>
+    <string name="menu_settings">Settings</string>
+    <string name="save_button">Save</string>
+    <string name="setting_memo_key">Private Memo Key</string>
 
     <string name="features">Features</string>
     <string name="wallet">Wallet</string>
@@ -28,6 +30,17 @@
     <string name="min_sp">Min SP</string>
     <string name="min_steem">Min Steem</string>
 
+    // Wallet info
+    <string name="steem_balance">Steem Balance</string>
+    <string name="sbd_balance">SDB Balance</string>
+    <string name="vesting_shares">Voting power</string>
+    <string name="delegated_vesting_shares">Delegated Voting Power</string>
+    <string name="received_vesting_shares">Received Voting Power</string>
+    <string name="savings_steem_balance">Savings Steem Balance</string>
+    <string name="savings_sbd_balance">Savings SBD balance</string>
+    <string name="account_value">Account Value</string>
+
+
 
     <string name="yes">Yes</string>
     <string name="no">No</string>
@@ -40,6 +53,7 @@
     <string name="no_account_configured">You haven\'t configure yet, go to account manager to add one</string>
     <string name="steemplus_api_not_responding">Steemplus API is not responding. Please try later...</string>
     <string name="no_active_user">No selected user account. Please select one and try again.</string>
+    <string name="already_active">This user is already your active!</string>
 
     // Popups
     <string name="delete_confirmation">You are about to delete %1$s\'s account. Are you sure you want to delete it ?</string>

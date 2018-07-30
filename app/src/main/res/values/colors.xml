@@ -6,4 +6,8 @@
     <color name="title_border_color">#b7b7b7</color>
     <color name="title_color">#b7b7b7</color>
     <color name="white">#FFFFFF</color>
+    <color name="transparent">#00000000</color>
+    <color name="tab_highlight">#ff9ecfbf</color>
+    <color name="colorItemWalletInfoLabel">#000000</color>
+    <color name="colorItemWalletInfoValue">#8f8f8f</color>
 </resources>

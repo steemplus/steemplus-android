@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.LayoutInflater;
@@ -15,9 +16,11 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Switch;
+import android.widget.TabHost;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.checkerframework.checker.linear.qual.Linear;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -44,8 +47,6 @@ public class WalletFragment extends Fragment implements taskCompleteListener {
     private taskCompleteListener<Object> parent;
     private WalletItemAdapter adapter;
 
-    private UserAccount activeUser = null;
-
     private ArrayList<WalletItem> walletItems = new ArrayList<>();
     private ArrayList<WalletItem> filteredWalletItems = new ArrayList<>();
     private boolean filtersSectionOpened = false;
@@ -53,6 +54,7 @@ public class WalletFragment extends Fragment implements taskCompleteListener {
     private ArrayList<String> filterTypes = new ArrayList<String>();
     private boolean hideSpam = false;
     private HashMap<String, Double> filterMin = new HashMap<String, Double>();
+    private UserAccount activeUser;
 
     private ListView walletItemListView;
     private LinearLayout hideDisplayFilterBtn;
@@ -69,6 +71,8 @@ public class WalletFragment extends Fragment implements taskCompleteListener {
     private EditText minSteemEditText;
     private EditText minSPEditText;
 
+    private TabHost tabHost;
+
     private String TAG_LOG = "WalletFragment";
 
     @Override
@@ -77,6 +81,7 @@ public class WalletFragment extends Fragment implements taskCompleteListener {
         super.onAttach(activity);
         this.activity= (MainActivity) activity;
         parent = (taskCompleteListener<Object>) activity;
+        activeUser = this.activity.getActiveUser();
     }
 
     @Override
@@ -97,6 +102,19 @@ public class WalletFragment extends Fragment implements taskCompleteListener {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View view = inflater.inflate(R.layout.wallet, container, false);
+
+        tabHost = view.findViewById(R.id.wallet_tab_host);
+        tabHost.setup();
+        TabHost.TabSpec spec = tabHost.newTabSpec("Information");
+        spec.setIndicator("Info");
+        spec.setContent(R.id.tab_wallet_information);
+        tabHost.addTab(spec);
+
+        spec = tabHost.newTabSpec("History");
+        spec.setContent(R.id.tab_wallet_history);
+        spec.setIndicator("History");
+        tabHost.addTab(spec);
+
         walletItemListView = view.findViewById(R.id.list_items_wallet);
         hideDisplayFilterBtn = view.findViewById(R.id.filters_button);
         hideDisplayFilterText = view.findViewById(R.id.filters_button_text);
@@ -205,7 +223,32 @@ public class WalletFragment extends Fragment implements taskCompleteListener {
             @Override
             public void afterTextChanged(Editable editable) {}
         });
+
+        if(activeUser != null)
+        {
+            // Wallet info content
+            ViewGroup walletInfoContainer = view.findViewById(R.id.tab_wallet_information);
+
+            createWalletInfoRow(getString(R.string.steem_balance), activity.getActiveUser().getBalanceString(), walletInfoContainer);
+            createWalletInfoRow(getString(R.string.sbd_balance), activity.getActiveUser().getSBDBalanceString(), walletInfoContainer);
+            createWalletInfoRow(getString(R.string.vesting_shares), activity.getActiveUser().getVotingPowerString(activity.getDynamicGlobalProperty().getTotalVestingFundSteem().toReal(), activity.getDynamicGlobalProperty().getTotalVestingShares().toReal()), walletInfoContainer);
+            createWalletInfoRow(getString(R.string.delegated_vesting_shares), activity.getActiveUser().getDelegatedVotingPowerString(activity.getDynamicGlobalProperty().getTotalVestingFundSteem().toReal(), activity.getDynamicGlobalProperty().getTotalVestingShares().toReal()), walletInfoContainer);
+            createWalletInfoRow(getString(R.string.received_vesting_shares), activity.getActiveUser().getReceivedVotingPowerString(activity.getDynamicGlobalProperty().getTotalVestingFundSteem().toReal(), activity.getDynamicGlobalProperty().getTotalVestingShares().toReal()), walletInfoContainer);
+            createWalletInfoRow(getString(R.string.savings_steem_balance), activity.getActiveUser().getSavingsSteemBalanceString(), walletInfoContainer);
+            createWalletInfoRow(getString(R.string.savings_sbd_balance), activity.getActiveUser().getSavingsSBDBalanceString(), walletInfoContainer);
+            createWalletInfoRow(getString(R.string.account_value), activity.getActiveUser().getAccountValueString(activity.getMarketPrices(), activity.getDynamicGlobalProperty()), walletInfoContainer);
+        }
         return view;
+    }
+
+    private void createWalletInfoRow(String label, String value, ViewGroup walletInfoContainer)
+    {
+        LinearLayout walletInfoRow = (LinearLayout) LayoutInflater.from(activity).inflate(R.layout.wallet_info_row, walletInfoContainer, false);
+        TextView walletInfoLabel = walletInfoRow.findViewById(R.id.wallet_info_label);
+        walletInfoLabel.setText(label);
+        TextView walletInfoValue = walletInfoRow.findViewById(R.id.wallet_info_value);
+        walletInfoValue.setText(value);
+        walletInfoContainer.addView(walletInfoRow);
     }
 
     @Override
@@ -216,26 +259,10 @@ public class WalletFragment extends Fragment implements taskCompleteListener {
 
     private void syncWalletDB()
     {
-        new AsyncTask<Void, Void, UserAccount>() {
-            @Override
-            protected UserAccount doInBackground(Void... params) {
-                UserAccount userAccount = activity.getAppDatabase(activity).userDao().getFavorite();
-                return userAccount;
-            }
-
-            @Override
-            protected void onPostExecute(UserAccount userAccount)
-            {
-                if(userAccount == null)
-                {
-                    Toast.makeText(activity, R.string.no_active_user, Toast.LENGTH_SHORT).show();
-                    return;
-                };
-                activeUser = userAccount;
-                new AsyncGetJSON(activity, WalletFragment.this).execute(Constants.GET_STEEMPLUS_WALLET_HISTORY, Constants.GET_STEEMPLUS_WALLET_HISTORY_URL, activeUser.getUsername());
-            }
-        }.execute();
-
+        if(activity.getActiveUser() == null)
+            Toast.makeText(activity, R.string.no_active_user, Toast.LENGTH_SHORT).show();
+        else
+                new AsyncGetJSON(activity, WalletFragment.this).execute(Constants.GET_STEEMPLUS_WALLET_HISTORY, Constants.GET_STEEMPLUS_WALLET_HISTORY_URL, activity.getActiveUser().getUsername());
     }
 
     private void setupList(JSONArray json)
@@ -245,7 +272,7 @@ public class WalletFragment extends Fragment implements taskCompleteListener {
             for(int i = 0; i < json.length(); i++)
             {
                 JSONObject obj = json.getJSONObject(i);
-                WalletItem newWalletItem = new WalletItem(obj);
+                WalletItem newWalletItem = new WalletItem(obj, activity.getDynamicGlobalProperty());
                 walletItems.add(newWalletItem);
             }
             filteredWalletItems = (ArrayList<WalletItem>)walletItems.clone();
@@ -298,6 +325,20 @@ public class WalletFragment extends Fragment implements taskCompleteListener {
                 setupList(json);
                 break;
             }
+        }
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        if(activeUser != activity.getActiveUser())
+        {
+            Fragment frg = null;
+            frg = getFragmentManager().findFragmentByTag(Constants.WALLET_FRAGMENT);
+            final FragmentTransaction ft = getFragmentManager().beginTransaction();
+            ft.detach(frg);
+            ft.attach(frg);
+            ft.commit();
         }
     }
 }

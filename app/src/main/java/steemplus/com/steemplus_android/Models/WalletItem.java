@@ -5,10 +5,15 @@ import android.text.TextUtils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+
+import eu.bittrade.libs.steemj.base.models.DynamicGlobalProperty;
+import steemplus.com.steemplus_android.Tools.SteemFormatter;
 
 public class WalletItem {
 
@@ -22,7 +27,7 @@ public class WalletItem {
     private double rewardVests;
     private String amountSymbol;
 
-    public WalletItem(JSONObject obj)
+    public WalletItem(JSONObject obj, DynamicGlobalProperty dynamicGlobalProperty)
     {
         try
         {
@@ -32,7 +37,7 @@ public class WalletItem {
             this.username = obj.getString("to_from");
             this.rewardSteem = obj.getDouble("reward_steem");
             this.rewardSbd = obj.getDouble("reward_sbd");
-            this.rewardVests = obj.getDouble("reward_vests");
+            this.rewardVests = SteemFormatter.vestToSteemPower(obj.getDouble("reward_vests"), dynamicGlobalProperty.getTotalVestingFundSteem().getAmount().doubleValue(), dynamicGlobalProperty.getTotalVestingShares().getAmount().doubleValue());
             this.amountSymbol = obj.getString("amount_symbol");
 
             String dtStart = obj.getString("timestamp");

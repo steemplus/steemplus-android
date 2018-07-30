@@ -5,6 +5,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,7 +34,7 @@ import steemplus.com.steemplus_android.Tools.AsyncGetSteemJ;
 import steemplus.com.steemplus_android.Tools.SteemFormatter;
 import steemplus.com.steemplus_android.taskCompleteListener;
 
-public class DrawerUserPanelFragment extends Fragment{
+public class DrawerUserPanelFragment extends Fragment {
 
     private MainActivity activity;
     private taskCompleteListener<Object> parent;
@@ -43,6 +44,9 @@ public class DrawerUserPanelFragment extends Fragment{
     private ImageView userProfilePictureImageView;
     private WeakReference asyncTaskWeakRef;
     private String TAG_LOG = "DrawerUserPanelFragment";
+
+    private UserAccount activeUser;
+
 
     @Override
     public void onAttach(Context activity) {
@@ -56,7 +60,6 @@ public class DrawerUserPanelFragment extends Fragment{
     public void onCreate(@Nullable Bundle savedInstanceState) {
         //   Log.d(TAG_LOG, "onCreate");
         super.onCreate(savedInstanceState);
-
     }
 
 
@@ -80,22 +83,11 @@ public class DrawerUserPanelFragment extends Fragment{
     }
 
     private void setProfile() {
-        new AsyncTask<Void, Void, UserAccount>() {
-            @Override
-            protected UserAccount doInBackground(Void... params) {
-                UserAccount userAccount = activity.getAppDatabase(activity).userDao().getFavorite();
-                return userAccount;
-            }
-
-            @Override
-            protected void onPostExecute(UserAccount userAccount)
-            {
-                if(userAccount == null) return;
-                setUsername(userAccount.getUsername());
-                setReputation(userAccount.getReputation());
-                setProfilePicture(userAccount.getImgUrl());
-            }
-        }.execute();
+        activeUser = activity.getActiveUser();
+        if(activeUser == null) return;
+        setUsername(activeUser.getUsername());
+        setReputation(activeUser.getReputation());
+        setProfilePicture(activeUser.getImgUrl());
     }
 
     private void setUsername(String username)

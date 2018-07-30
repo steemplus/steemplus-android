@@ -8,7 +8,7 @@ import android.content.Context;
 import steemplus.com.steemplus_android.Database.Dao.UserAccountDao;
 import steemplus.com.steemplus_android.Models.UserAccount;
 
-@Database(entities = {UserAccount.class}, version = 3,  exportSchema = false)
+@Database(entities = {UserAccount.class}, version = 6,  exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     public abstract UserAccountDao userDao();

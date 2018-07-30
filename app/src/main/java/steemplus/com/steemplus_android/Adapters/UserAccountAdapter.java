@@ -3,6 +3,7 @@ package steemplus.com.steemplus_android.Adapters;
 import android.accounts.Account;
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -54,6 +55,11 @@ public class UserAccountAdapter extends ArrayAdapter<UserAccount> {
         }
         UserAccount userAccount = userAccounts.get(position);
         holder.usernameTextView.setText(userAccount.getUsername());
+        if(userAccount.isFavorite())
+            holder.usernameTextView.setTypeface(Typeface.DEFAULT_BOLD);
+        else
+            holder.usernameTextView.setTypeface(Typeface.DEFAULT);
+
         Picasso.get().load(userAccount.getImgUrl()).into(holder.userImageView);
 
 

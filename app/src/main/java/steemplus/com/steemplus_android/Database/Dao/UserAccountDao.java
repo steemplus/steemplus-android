@@ -28,6 +28,9 @@ public interface UserAccountDao {
     @Update
     void setFavorite(UserAccount... users);
 
+    @Update
+    void update(UserAccount... users);
+
     @Query("SELECT COUNT(*) from UserAccount")
     int countUsers();
 

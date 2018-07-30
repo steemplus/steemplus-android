@@ -25,4 +25,15 @@ public class SteemFormatter {
         }
         return "https://steemitimages.com/128x128/"+ imgURL;
     }
+
+    public static double vestToSteemPower(double vests, double totalVestingFundSteem, double totalVestingShares)
+    {
+        double sp = totalVestingFundSteem * vests / totalVestingShares;
+        return toFixed(3, sp);
+    }
+
+    public static double toFixed(int decimal, double x)
+    {
+        return new BigDecimal(x).setScale(decimal, BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
 }
