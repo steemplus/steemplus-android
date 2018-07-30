@@ -57,16 +57,9 @@ public class SettingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.settings_layout, container, false);
-        if(activeUser != activity.getActiveUser() && activeUser != null)
-        {
-            initView();
-        }
-        else if(activeUser != activity.getActiveUser())
-        {
-            privateMemoKeyEditText = view.findViewById(R.id.settings_memo_key);
-            saveBtn = view.findViewById(R.id.save_settings_btn);
-            initView();
-        }
+        privateMemoKeyEditText = view.findViewById(R.id.settings_memo_key);
+        saveBtn = view.findViewById(R.id.save_settings_btn);
+        initView();
         return view;
     }
 
